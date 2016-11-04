@@ -1,16 +1,32 @@
 // YOUR CODE HERE:
 //https://api.parse.com/1/classes/messages
-var app = {};
-
+var app = {
+  server:"https://api.parse.com/1/classes/messages",
+  friends:[]
   //init:function(){};
-app.init = function () {
 
+
+};
+
+app.init = function () {
+  //$('document.body').on('click','.username',function(event) {
+   //app.friends.push(username);
+  //});
+
+  app.fetch()
+  .then(function(stuff) {
+     for (var i = 0; i < stuff.results.length;  i ++) {
+       //console.log(stuff.results);
+        app.renderMessage(stuff.results[i]);
+     }
+
+  });
 }
 
 app.send = function (message) {
-  $.ajax({
+  return $.ajax({
   // This is the url you should use to communicate with the parse API server.
-     url: 'https://api.parse.com/1/classes/messages',
+     url: app.server,
      type: 'POST',
      data: JSON.stringify(message),
      contentType: 'application/json',
@@ -26,13 +42,13 @@ app.send = function (message) {
 
 app.fetch = function () {
   // This is the url you should use to communicate with the parse API server.
-   $.ajax({
-     url: undefined,
+   return $.ajax({
+     url: app.server,
      type: 'GET',
      //data: JSON.stringify(message),
      contentType: 'text/html',
      success: function (data) {
-     console.log('chatterbox: Messages Sent.');
+     console.log('chatterbox: Messages Received.');
      },
      error: function (data) {
      // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -48,16 +64,20 @@ app.clearMessages = function () {
 };
 
 app.renderMessage = function (message) {
-
-  $('#chats').append('<div> message  </div>');
+  console.log(message);
+  $('#chats').append('<div> Username: '+message.userName+' </div>');
+  // $('#chats').append('<div> Text: '+message.text+' </div>');
 
 };
+
 
 app.renderRoom = function (roomName) {
 
   $('#roomSelect').append('<div> roomName </div>');
 
 };
+
+app.init();
 
 
 
