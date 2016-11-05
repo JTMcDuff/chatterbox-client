@@ -26,7 +26,7 @@ app.init = function () {
       //$('#submitbutton').preventDefault;
       console.log("This is a message. "+$('.messagetext').val());
       // app.send($('.messagetext').val());
-      app.outgoingMessage($('.messagetext').val(),$('.username').val());
+      app.outgoingMessage($('.messagetext').val(),$('.username').val(),$('.room').val());
     });
 
 }
@@ -73,16 +73,22 @@ app.clearMessages = function () {
 
 };
 
+function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+}
+
 app.renderMessage = function (message) {
 if (  ( message.text.indexOf("<script>") === -1 ) && (message.text.indexOf('<script>') === -1)  && (message.roomname.indexOf("<script>") === -1 ) ) {
     console.log(message);
-     var uriUsername = encodeURI(message.username);
-     var uriText = encodeURI(message.text);
-     var uriRoomname = encodeURI(message.roomname);
+     var escapedUsername = escapeHtml(message.username);
+     var escapedText = escapeHtml(message.text);
+     var escapedRoomname = escapeHtml(message.roomname);
 
-    $('#chats').append('<div> Username: '+uriUsername  +'</div>');
-    $('#chats').append('<div> Message: '+uriText  +'</div>');
-    $('#chats').append('<div> Room: '+uriRoomname  +'</div>');
+    $('#chats').append('<div> Username: '+escapedUsername  +'</div>');
+    $('#chats').append('<div> Message: '+escapedText  +'</div>');
+    $('#chats').append('<div> Room: '+escapedRoomname  +'</div>');
  }
 
 };
@@ -95,12 +101,12 @@ app.renderRoom = function (roomName) {
 
 $(document).ready(app.init);
 
-app.outgoingMessage = function (text, username) {
+app.outgoingMessage = function (text, username, roomname) {
   var msg = {};
 
   msg['username'] = username;
   msg['text'] = text;
-  msg['roomname'] = "room1";
+  msg['roomname'] = roomname;
   console.log("Rendered Object: "+msg['text']);
   app.send(msg);
   // return msg;
