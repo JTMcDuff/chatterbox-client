@@ -15,11 +15,16 @@ app.init = function () {
   app.fetch()
    .then(function(stuff) {
      for (var i = 0; i < stuff.results.length;  i ++) {
-       console.log(stuff.results);
+       //console.log(stuff.results);
         app.renderMessage(stuff.results[i]);
      }
 
   });
+   $("#messageform").submit(function() {
+      console.log("This is a message."+$('.messagetext').val());
+      app.send($('.messagetext'))
+    });
+
 }
 
 app.send = function (message) {
@@ -63,8 +68,9 @@ app.clearMessages = function () {
 };
 
 app.renderMessage = function (message) {
-  //if (message.test.indexOf)
+  if (message.text.indexOf("<script>") != -1 && message.text.indexOf('<script>') != -1)  {
   $('#chats').append('<div> Username: '+message.username  +'</div>');
+}
 
 };
 
