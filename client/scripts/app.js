@@ -15,14 +15,16 @@ app.init = function () {
   app.fetch()
    .then(function(stuff) {
      for (var i = 0; i < stuff.results.length;  i ++) {
-       //console.log(stuff.results);
+       console.log(stuff.results);
         app.renderMessage(stuff.results[i]);
      }
 
   });
-   $("#messageform").submit(function() {
-      console.log("This is a message."+$('.messagetext').val());
-      app.send($('.messagetext'))
+   $("#submitbutton").on('click',function() {
+      $('#submitbutton').preventDefault;
+      console.log("This is a message. "+$('.messagetext').val());
+      // app.send($('.messagetext').val());
+      app.outgoingMessage($('.messagetext').val());
     });
 
 }
@@ -41,7 +43,9 @@ app.send = function (message) {
      // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
      console.error('chatterbox: Failed to send message', data);
      }
+
   });
+  app.fetch();
 }
 
 app.fetch = function () {
@@ -68,7 +72,7 @@ app.clearMessages = function () {
 };
 
 app.renderMessage = function (message) {
-  if (message.text.indexOf("<script>") != -1 && message.text.indexOf('<script>') != -1)  {
+  if (  ( message.text.indexOf("<script>") != -1 ) && (message.text.indexOf('<script>') != -1)  && (message.roomname.text.indexOf("<script>") ) ) {
   $('#chats').append('<div> Username: '+message.username  +'</div>');
 }
 
@@ -83,7 +87,16 @@ app.renderRoom = function (roomName) {
 
 $(document).ready(app.init);
 
+app.outgoingMessage = function (text) {
+  var msg = {};
 
+  msg.username = window.location.search.slice(10);
+  msg.body = text;
+  msg.room = "room1";
+
+  app.send(msg);
+  // return msg;
+}
 
 
 
