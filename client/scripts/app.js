@@ -2,7 +2,8 @@
 //https://api.parse.com/1/classes/messages
 var app = {
   server:"https://api.parse.com/1/classes/messages",
-  friends:[]
+  friends:[],
+  //username: "Testy McTesterson"
 
 
 
@@ -15,21 +16,23 @@ app.init = function () {
   app.fetch()
    .then(function(stuff) {
      for (var i = 0; i < stuff.results.length;  i ++) {
-       console.log(stuff.results);
+        //console.log(stuff.results);
         app.renderMessage(stuff.results[i]);
-     }
+      }
+     });
 
-  });
+
    $("#submitbutton").on('click',function() {
-      $('#submitbutton').preventDefault;
+      //$('#submitbutton').preventDefault;
       console.log("This is a message. "+$('.messagetext').val());
       // app.send($('.messagetext').val());
-      app.outgoingMessage($('.messagetext').val());
+      app.outgoingMessage($('.messagetext').val(),$('.username').val());
     });
 
 }
 
 app.send = function (message) {
+  console.log(message);
   return $.ajax({
   // This is the url you should use to communicate with the parse API server.
      url: app.server,
@@ -72,28 +75,28 @@ app.clearMessages = function () {
 };
 
 app.renderMessage = function (message) {
-  if (  ( message.text.indexOf("<script>") != -1 ) && (message.text.indexOf('<script>') != -1)  && (message.roomname.text.indexOf("<script>") ) ) {
-  $('#chats').append('<div> Username: '+message.username  +'</div>');
-}
+if (  ( message.text.indexOf("<script>") === -1 ) && (message.text.indexOf('<script>') === -1)  && (message.roomname.indexOf("<script>") === -1 ) ) {
+    console.log(message);
+    $('#chats').append('<div> Username: '+message.username  +'</div>');
+ }
 
 };
 
 
 app.renderRoom = function (roomName) {
-
   $('#roomSelect').append('<div> roomName </div>');
 
 };
 
 $(document).ready(app.init);
 
-app.outgoingMessage = function (text) {
+app.outgoingMessage = function (text, username) {
   var msg = {};
 
-  msg.username = window.location.search.slice(10);
-  msg.body = text;
-  msg.room = "room1";
-
+  msg['username'] = username;
+  msg['text'] = text;
+  msg['roomname'] = "room1";
+  console.log("Rendered Object: "+msg['text']);
   app.send(msg);
   // return msg;
 }
