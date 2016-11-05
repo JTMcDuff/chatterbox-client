@@ -3,7 +3,7 @@
 var app = {
   server:"https://api.parse.com/1/classes/messages",
   friends:[]
-  //init:function(){};
+
 
 
 };
@@ -12,11 +12,10 @@ app.init = function () {
   //$('document.body').on('click','.username',function(event) {
    //app.friends.push(username);
   //});
-
   app.fetch()
-  .then(function(stuff) {
+   .then(function(stuff) {
      for (var i = 0; i < stuff.results.length;  i ++) {
-       //console.log(stuff.results);
+       console.log(stuff.results);
         app.renderMessage(stuff.results[i]);
      }
 
@@ -64,9 +63,8 @@ app.clearMessages = function () {
 };
 
 app.renderMessage = function (message) {
-  console.log(message);
-  $('#chats').append('<div> Username: '+message.userName+' </div>');
-  // $('#chats').append('<div> Text: '+message.text+' </div>');
+  //if (message.test.indexOf)
+  $('#chats').append('<div> Username: '+message.username  +'</div>');
 
 };
 
@@ -77,7 +75,8 @@ app.renderRoom = function (roomName) {
 
 };
 
-app.init();
+$(document).ready(app.init);
+
 
 
 
