@@ -1,7 +1,7 @@
 // YOUR CODE HERE:
 //https://api.parse.com/1/classes/messages
 var app = {
-  server:"https://api.parse.com/1/classes/messages",
+  server:"https://api.parse.com/1/classes/messages?limit=1000&order=-createdAt",
   friends:[],
   //username: "Testy McTesterson"
 
@@ -47,8 +47,7 @@ app.send = function (message) {
      console.error('chatterbox: Failed to send message', data);
      }
 
-  });
-  app.fetch();
+  }).then(app.fetch());
 }
 
 app.fetch = function () {
@@ -77,7 +76,13 @@ app.clearMessages = function () {
 app.renderMessage = function (message) {
 if (  ( message.text.indexOf("<script>") === -1 ) && (message.text.indexOf('<script>') === -1)  && (message.roomname.indexOf("<script>") === -1 ) ) {
     console.log(message);
-    $('#chats').append('<div> Username: '+message.username  +'</div>');
+     var uriUsername = encodeURI(message.username);
+     var uriText = encodeURI(message.text);
+     var uriRoomname = encodeURI(message.roomname);
+
+    $('#chats').append('<div> Username: '+uriUsername  +'</div>');
+    $('#chats').append('<div> Message: '+uriText  +'</div>');
+    $('#chats').append('<div> Room: '+uriRoomname  +'</div>');
  }
 
 };
